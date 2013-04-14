@@ -52,5 +52,9 @@ class TestBenchmarkFunctions(unittest.TestCase):
         self.assertEqual(description.benchFn, opti_benchmarks.DeJongF1)
         return
 
+    def testBenchRunnerValidateDescription(self):
+        runner = opti_benchmarks.BenchmarkRunner()
+        self.assertRaises(opti_benchmarks.BenchmarkDescriptionError, runner.validateDescription, None)
+
 if __name__ == "__main__":
     unittest.main()

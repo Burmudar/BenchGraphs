@@ -8,7 +8,16 @@ class BenchmarkDescription:
         self.z_far = 0
         self.amount_of_points = 0
         self.benchFn = None
+        self.benchTitle = ""
         return
+
+    def __repr__(self):
+        return ("<BenchmarkDescription xPlane["+ self.x_near + "," + self.x_far + "] - " +
+        " yPlane[" + self.y_near + "," + self.y_far + "] - " +
+        " zPlane[" + self.z_near + "," + self.z_far + "] - " +
+        " Amount Of Points [" + self.amount_of_points + "] -" +
+        " Benchmark Title [" + self.benchTitle + "] - " +
+        " Benchmark Function [" + self.benchFn + "]>")
 
 DEJONGF1_TITLE = "DeJong F1"
 
@@ -50,3 +59,35 @@ class BenchmarkDescriptionBuilder:
 
     def Build(self):
         return self.benchmarkDescription
+
+class BenchmarkResult:
+    def __init__(self,X,Y,Z):
+        self.x = X
+        self.y = Y
+        self.z = Z
+        return
+
+class BenchmarkDescriptionError(Exception):
+    def __init__(self,benchDescription,msg):
+        self.benchDescription = benchDescription
+        self.msg = msg
+
+    def __str__(self):
+        return repr(self.benchDescription) + " - Msg: " + self.msg
+
+
+
+class BenchmarkRunner:
+    def __init__(self):
+        return
+
+    def validateDescription(self,description):
+        if description is None:
+            raise BenchmarkDescriptionError(description,"Description cannot be None")
+        if  description.benchFn is None:
+            raise BenchmarkDescriptionError(description,"Cannot run benchmark when BenchFn is None")
+
+    def runBenchmark(self,description):
+        print "Checking BenchmarkDescription"
+        self.validateDescription(description)
+        return None
