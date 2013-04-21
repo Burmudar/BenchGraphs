@@ -12,17 +12,30 @@ class BenchmarkDescription:
         return
 
     def __repr__(self):
-        return ("<BenchmarkDescription xPlane["+ self.x_near + "," + self.x_far + "] - " +
-        " yPlane[" + self.y_near + "," + self.y_far + "] - " +
-        " zPlane[" + self.z_near + "," + self.z_far + "] - " +
-        " Amount Of Points [" + self.amount_of_points + "] -" +
-        " Benchmark Title [" + self.benchTitle + "] - " +
-        " Benchmark Function [" + self.benchFn + "]>")
+        return ("<BenchmarkDescription xPlane["+ str(self.x_near) + "," + str(self.x_far) + "] - " +
+        " yPlane[" + str(self.y_near) + "," + str(self.y_far) + "] - " +
+        " zPlane[" + str(self.z_near) + "," + str(self.z_far) + "] - " +
+        " Amount Of Points [" + str(self.amount_of_points) + "] -" +
+        " Benchmark Title [" + str(self.benchTitle) + "] - " +
+        " Benchmark Function [" + str(self.benchFn) + "]>")
+
+    def hasXPlane(self):
+        return self.x_near != self.x_far
+
+    def hasYPlane(self):
+        return self.y_near != self.y_far
+
+    def hasZPlane(self):
+        return self.z_near != self.z_far
+
+    def hasAmountOfPoints(self):
+        return self.amount_of_points > 0
 
 DEJONGF1_TITLE = "DeJong F1"
 
 def DeJongF1(x,y):
 	return x**2 + y**2
+
 
 class BenchmarkDescriptionBuilder:
     def __init__(self):
@@ -58,7 +71,9 @@ class BenchmarkDescriptionBuilder:
         return self
 
     def Build(self):
-        return self.benchmarkDescription
+        builtDescription = self.benchmarkDescription
+        self.NewInstance()
+        return builtDescription
 
 class BenchmarkResult:
     def __init__(self,X,Y,Z):
@@ -75,19 +90,29 @@ class BenchmarkDescriptionError(Exception):
     def __str__(self):
         return repr(self.benchDescription) + " - Msg: " + self.msg
 
-
-
 class BenchmarkRunner:
     def __init__(self):
         return
 
-    def validateDescription(self,description):
+    def isValidDescription(self,description):
         if description is None:
-            raise BenchmarkDescriptionError(description,"Description cannot be None")
-        if  description.benchFn is None:
-            raise BenchmarkDescriptionError(description,"Cannot run benchmark when BenchFn is None")
+            print 'In None - ' + str(description)
+            return False
+        if not description.hasXPlane():
+            print 'In XPlane - ' + str(description)
+            return False
+        if not description.hasYPlane():
+            print 'In YPlane - ' + str(description)
+            return False
+        if not description.hasAmountOfPoints():
+            print 'In AmountOfPoints - ' + str(description)
+            return False
+        if description.benchFn is None:
+            print 'In benchFn - ' + str(description)
+            return False
+        return True
 
     def runBenchmark(self,description):
-        print "Checking BenchmarkDescription"
-        self.validateDescription(description)
+        if not self.isValidDescription(description):
+            raise BenchmarkDescriptionError(description, "The benchamrk description given was not valid")
         return None

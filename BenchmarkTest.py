@@ -13,6 +13,7 @@ class TestBenchmarkFunctions(unittest.TestCase):
         description = builder.XPlane(-5,5).Build()
         self.assertEqual(description.x_near, -5)
         self.assertEqual(description.x_far, 5)
+        self.assertTrue(description.hasXPlane())
         return
 
     def testBenchmarkDescriptionYPlane(self):
@@ -20,6 +21,7 @@ class TestBenchmarkFunctions(unittest.TestCase):
         description = builder.YPlane(-5,5).Build()
         self.assertEqual(description.y_near, -5)
         self.assertEqual(description.y_far, 5)
+        self.assertTrue(description.hasYPlane())
         return
 
     def testBenchmarkDescriptionZPlane(self):
@@ -27,6 +29,7 @@ class TestBenchmarkFunctions(unittest.TestCase):
         description = builder.ZPlane(-5,5).Build()
         self.assertEqual(description.z_near, -5)
         self.assertEqual(description.z_far, 5)
+        self.assertTrue(description.hasZPlane())
         return
 
     def testBenchmarkDescriptionAmountOfPoints(self):
@@ -52,9 +55,26 @@ class TestBenchmarkFunctions(unittest.TestCase):
         self.assertEqual(description.benchFn, opti_benchmarks.DeJongF1)
         return
 
-    def testBenchRunnerValidateDescription(self):
+    def testBenchRunnerIsValidDescription(self):
         runner = opti_benchmarks.BenchmarkRunner()
-        self.assertRaises(opti_benchmarks.BenchmarkDescriptionError, runner.validateDescription, None)
+        self.assertFalse(runner.isValidDescription(None))
+        self.assertFalse(runner.isValidDescription(opti_benchmarks.BenchmarkDescription()))
+        builder = opti_benchmarks.BenchmarkDescriptionBuilder()
+        description = builder.DeJongF1().AmountOfPoints(150).XPlane(-5.12,5.12).Build()
+        self.assertFalse(runner.isValidDescription(description))
+        description = builder.DeJongF1().AmountOfPoints(150).YPlane(-5.12,5.12).Build()
+        self.assertFalse(runner.isValidDescription(description))
+        description = builder.DeJongF1().AmountOfPoints(150).Build()
+        self.assertFalse(runner.isValidDescription(description))
+        description = builder.DeJongF1().AmountOfPoints(150).XPlane(-5.12,5.12).YPlane(-5.12,5.12).Build()
+        self.assertTrue(runner.isValidDescription(description))
+        return
+
+
+    def testBenchRunnerRunBenchmark(self):
+        runner = opti_benchmarks.BenchmarkRunner()
+        self.assertRaises(opti_benchmarks.BenchmarkDescriptionError, runner.runBenchmark, None)
+        return
 
 if __name__ == "__main__":
     unittest.main()
