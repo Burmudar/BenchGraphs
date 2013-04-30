@@ -1,4 +1,9 @@
 import numpy as np
+from mpl_toolkits.mplot3d import Axes3D
+from matplotlib import cm
+from matplotlib.ticker import LinearLocator, FixedLocator, FormatStrFormatter
+import matplotlib
+import matplotlib.pyplot as plt
 
 class BenchmarkDescription:
     def __init__(self):
@@ -88,10 +93,11 @@ class BenchmarkDescriptionBuilder:
         return builtDescription
 
 class BenchmarkResult:
-    def __init__(self,X,Y,Z):
+    def __init__(self,X,Y,Z,bencTitle):
         self.X = X
         self.Y = Y
         self.Z = Z
+        self.BenchTitle
         return
 
 class BenchmarkDescriptionError(Exception):
@@ -130,7 +136,32 @@ class BenchmarkRunner:
         z = []
         x = description.createXLinspace()
         y = description.createYLinspace()
+        x, y = np.meshgrid(x, y)
         for i in range(description.amount_of_points):
             val = description.benchFn(x[i],y[i])
             z.append(val)
-        return BenchmarkResult(description.createXLinspace(), description.createXLinspace(), np.array(z))
+        return BenchmarkResult(description.createXLinspace(), description.createXLinspace(), np.array(z), description.benchTitle)
+
+class BenchmarkResultPlotter:
+    def __init__(self):
+        self.rstride = 1
+        self.cstride = 1
+        self.cmap = cm.jet
+        self.linewidth = 0
+        self.antialiased = False
+        self.major_formatter = FormatStrFormatter('%.0f')
+        matplotlib.use('PDF')
+        return
+
+    def createSurf(self, X, Y, Z):
+       return ax.plot_surface(X, Y, Z, rstride = self.rstride, cstride = self.cstride, cmap = self.cm.jet, linewidth=self.linewidth, antialiased=self.antialiased) 
+
+    def PlotResult(self,benchmarkResult, figureName=''):
+       fig = plt.figure()
+       ax = Axes3D(fig)
+       surf = self.createSurf(benchmarkResult.X, benchmarkResult.Y, benchmarkResult.Y)
+       ax.w_zaxis.set_major_formatter(self.major_formatter)
+       if figureName == '':
+           plt.savefig(benchmarkResult.BenchTitle)
+       else:
+           plt.savefig(figureName)
