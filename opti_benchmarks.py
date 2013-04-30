@@ -1,3 +1,5 @@
+import numpy as np
+
 class BenchmarkDescription:
     def __init__(self):
         self.x_near = 0
@@ -30,6 +32,16 @@ class BenchmarkDescription:
 
     def hasAmountOfPoints(self):
         return self.amount_of_points > 0
+
+    def createXLinspace(self):
+        if not self.hasXPlane():
+            raise BenchmarkDescriptionError("Cannot create X Linspace with no defined X Plane")
+        return np.linspace(self.x_near, self.x_far, self.amount_of_points)
+
+    def createYLinspace(self):
+        if not self.hasYPlane():
+            raise BenchmarkDescriptionError("Cannot create Y Linspace with no defined Y Plane")
+        return np.linspace(self.y_near, self.y_far, self.amount_of_points)
 
 DEJONGF1_TITLE = "DeJong F1"
 
@@ -77,9 +89,9 @@ class BenchmarkDescriptionBuilder:
 
 class BenchmarkResult:
     def __init__(self,X,Y,Z):
-        self.x = X
-        self.y = Y
-        self.z = Z
+        self.X = X
+        self.Y = Y
+        self.Z = Z
         return
 
 class BenchmarkDescriptionError(Exception):
@@ -115,4 +127,10 @@ class BenchmarkRunner:
     def runBenchmark(self,description):
         if not self.isValidDescription(description):
             raise BenchmarkDescriptionError(description, "The benchamrk description given was not valid")
-        return None
+        z = []
+        x = description.createXLinspace()
+        y = description.createYLinspace()
+        for i in range(description.amount_of_points):
+            val = description.benchFn(x[i],y[i])
+            z.append(val)
+        return BenchmarkResult(description.createXLinspace(), description.createXLinspace(), np.array(z))

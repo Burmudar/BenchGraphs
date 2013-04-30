@@ -1,4 +1,5 @@
 import unittest
+import numpy as np
 import opti_benchmarks
 
 class TestBenchmarkFunctions(unittest.TestCase):
@@ -55,6 +56,14 @@ class TestBenchmarkFunctions(unittest.TestCase):
         self.assertEqual(description.benchFn, opti_benchmarks.DeJongF1)
         return
 
+    def testBenchmarkDescriptionNPLinspaceCreation(self):
+        builder = opti_benchmarks.BenchmarkDescriptionBuilder();
+        description = builder.DeJongF1().AmountOfPoints(150).XPlane(-5.12,5.12).YPlane(-5.12,5.12).Build()
+        self.assertIsNotNone(description.createXLinspace())
+        self.assertIsNotNone(description.createYLinspace())
+        self.assertIsInstance(description.createXLinspace(), np.ndarray, "Expected created X linspace to be of numpy.darray")
+        self.assertIsInstance(description.createYLinspace(), np.ndarray, "Expected created Y linsapce to be of numpy.darray")
+
     def testBenchRunnerIsValidDescription(self):
         runner = opti_benchmarks.BenchmarkRunner()
         self.assertFalse(runner.isValidDescription(None))
@@ -74,6 +83,13 @@ class TestBenchmarkFunctions(unittest.TestCase):
     def testBenchRunnerRunBenchmark(self):
         runner = opti_benchmarks.BenchmarkRunner()
         self.assertRaises(opti_benchmarks.BenchmarkDescriptionError, runner.runBenchmark, None)
+        builder = opti_benchmarks.BenchmarkDescriptionBuilder()
+        description = builder.AmountOfPoints(150).XPlane(-5.12,5.12).YPlane(-5.12,5.12).DeJongF1().Build()
+        result = runner.runBenchmark(description)
+        self.assertIsNotNone(result, "Expected a result after the benchmark was executed")
+        self.assertTrue(len(result.X) == description.amount_of_points)
+        self.assertTrue(len(result.Y) == description.amount_of_points)
+        self.assertTrue(len(result.Z) == description.amount_of_points)
         return
 
 if __name__ == "__main__":
