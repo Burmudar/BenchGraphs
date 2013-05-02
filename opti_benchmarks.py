@@ -3,6 +3,7 @@ from mpl_toolkits.mplot3d import Axes3D
 from matplotlib import cm
 from matplotlib.ticker import LinearLocator, FixedLocator, FormatStrFormatter
 import matplotlib
+matplotlib.use('PDF')
 import matplotlib.pyplot as plt
 
 class BenchmarkDescription:
@@ -26,25 +27,25 @@ class BenchmarkDescription:
         " Benchmark Title [" + str(self.benchTitle) + "] - " +
         " Benchmark Function [" + str(self.benchFn) + "]>")
 
-    def hasXPlane(self):
+    def HasXPlane(self):
         return self.x_near != self.x_far
 
-    def hasYPlane(self):
+    def HasYPlane(self):
         return self.y_near != self.y_far
 
-    def hasZPlane(self):
+    def HasZPlane(self):
         return self.z_near != self.z_far
 
-    def hasAmountOfPoints(self):
+    def HasAmountOfPoints(self):
         return self.amount_of_points > 0
 
-    def createXLinspace(self):
-        if not self.hasXPlane():
+    def CreateXLinspace(self):
+        if not self.HasXPlane():
             raise BenchmarkDescriptionError("Cannot create X Linspace with no defined X Plane")
         return np.linspace(self.x_near, self.x_far, self.amount_of_points)
 
-    def createYLinspace(self):
-        if not self.hasYPlane():
+    def CreateYLinspace(self):
+        if not self.HasYPlane():
             raise BenchmarkDescriptionError("Cannot create Y Linspace with no defined Y Plane")
         return np.linspace(self.y_near, self.y_far, self.amount_of_points)
 
@@ -93,11 +94,11 @@ class BenchmarkDescriptionBuilder:
         return builtDescription
 
 class BenchmarkResult:
-    def __init__(self,X,Y,Z,bencTitle):
+    def __init__(self,X,Y,Z,benchTitle):
         self.X = X
         self.Y = Y
         self.Z = Z
-        self.BenchTitle
+        self.BenchTitle = benchTitle
         return
 
 class BenchmarkDescriptionError(Exception):
@@ -112,17 +113,17 @@ class BenchmarkRunner:
     def __init__(self):
         return
 
-    def isValidDescription(self,description):
+    def IsValidDescription(self,description):
         if description is None:
             print 'In None - ' + str(description)
             return False
-        if not description.hasXPlane():
+        if not description.HasXPlane():
             print 'In XPlane - ' + str(description)
             return False
-        if not description.hasYPlane():
+        if not description.HasYPlane():
             print 'In YPlane - ' + str(description)
             return False
-        if not description.hasAmountOfPoints():
+        if not description.HasAmountOfPoints():
             print 'In AmountOfPoints - ' + str(description)
             return False
         if description.benchFn is None:
@@ -130,17 +131,17 @@ class BenchmarkRunner:
             return False
         return True
 
-    def runBenchmark(self,description):
-        if not self.isValidDescription(description):
+    def RunBenchmark(self,description):
+        if not self.IsValidDescription(description):
             raise BenchmarkDescriptionError(description, "The benchamrk description given was not valid")
         z = []
-        x = description.createXLinspace()
-        y = description.createYLinspace()
+        x = description.CreateXLinspace()
+        y = description.CreateYLinspace()
         x, y = np.meshgrid(x, y)
         for i in range(description.amount_of_points):
             val = description.benchFn(x[i],y[i])
             z.append(val)
-        return BenchmarkResult(description.createXLinspace(), description.createXLinspace(), np.array(z), description.benchTitle)
+        return BenchmarkResult(description.CreateXLinspace(), description.CreateXLinspace(), np.array(z), description.benchTitle)
 
 class BenchmarkResultPlotter:
     def __init__(self):
@@ -150,16 +151,13 @@ class BenchmarkResultPlotter:
         self.linewidth = 0
         self.antialiased = False
         self.major_formatter = FormatStrFormatter('%.0f')
-        matplotlib.use('PDF')
         return
-
-    def createSurf(self, X, Y, Z):
-       return ax.plot_surface(X, Y, Z, rstride = self.rstride, cstride = self.cstride, cmap = self.cm.jet, linewidth=self.linewidth, antialiased=self.antialiased) 
 
     def PlotResult(self,benchmarkResult, figureName=''):
        fig = plt.figure()
        ax = Axes3D(fig)
-       surf = self.createSurf(benchmarkResult.X, benchmarkResult.Y, benchmarkResult.Y)
+       surf = ax.plot_surface(benchmarkResult.X, benchmarkResult.Y, benchmarkResult.Z, rstride = self.rstride, cstride =
+               self.cstride, cmap = self.cmap, linewidth=self.linewidth, antialiased=self.antialiased)
        ax.w_zaxis.set_major_formatter(self.major_formatter)
        if figureName == '':
            plt.savefig(benchmarkResult.BenchTitle)
