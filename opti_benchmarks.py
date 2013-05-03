@@ -115,19 +115,14 @@ class BenchmarkRunner:
 
     def IsValidDescription(self,description):
         if description is None:
-            print 'In None - ' + str(description)
             return False
         if not description.HasXPlane():
-            print 'In XPlane - ' + str(description)
             return False
         if not description.HasYPlane():
-            print 'In YPlane - ' + str(description)
             return False
         if not description.HasAmountOfPoints():
-            print 'In AmountOfPoints - ' + str(description)
             return False
         if description.benchFn is None:
-            print 'In benchFn - ' + str(description)
             return False
         return True
 
@@ -141,7 +136,7 @@ class BenchmarkRunner:
         for i in range(description.amount_of_points):
             val = description.benchFn(x[i],y[i])
             z.append(val)
-        return BenchmarkResult(description.CreateXLinspace(), description.CreateXLinspace(), np.array(z), description.benchTitle)
+        return BenchmarkResult(description.CreateXLinspace(), description.CreateYLinspace(), np.array(z), description.benchTitle)
 
 class BenchmarkResultPlotter:
     def __init__(self):
@@ -159,6 +154,7 @@ class BenchmarkResultPlotter:
        surf = ax.plot_surface(benchmarkResult.X, benchmarkResult.Y, benchmarkResult.Z, rstride = self.rstride, cstride =
                self.cstride, cmap = self.cmap, linewidth=self.linewidth, antialiased=self.antialiased)
        ax.w_zaxis.set_major_formatter(self.major_formatter)
+       fig.colorbar(surf, shrink=0.5, aspect=5)
        if figureName == '':
            plt.savefig(benchmarkResult.BenchTitle)
        else:
