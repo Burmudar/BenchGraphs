@@ -107,6 +107,32 @@ class TestBenchmarkFunctions(unittest.TestCase):
         self.assertTrue(opti_benchmarks.Ackley == description.benchFn);
         description = builder.Branin().Build()
         self.assertTrue(opti_benchmarks.Branin == description.benchFn);
+        description = builder.Camel().Build()
+        self.assertTrue(opti_benchmarks.Camel == description.benchFn);
+        description = builder.Dropwave().Build()
+        self.assertTrue(opti_benchmarks.Dropwave == description.benchFn);
+        description = builder.Easom().Build()
+        self.assertTrue(opti_benchmarks.Easom == description.benchFn);
+        description = builder.GeneralRosenbrock().Build()
+        self.assertTrue(opti_benchmarks.GeneralRosenbrock == description.benchFn);
+        description = builder.Goldstein().Build()
+        self.assertTrue(opti_benchmarks.Goldstein == description.benchFn);
+        description = builder.Griewank().Build()
+        self.assertTrue(opti_benchmarks.Griewank == description.benchFn);
+        description = builder.Himmelblau().Build()
+        self.assertTrue(opti_benchmarks.Himmelblau == description.benchFn);
+        description = builder.Michalewicz().Build()
+        self.assertTrue(opti_benchmarks.Michalewicz == description.benchFn);
+        description = builder.Rosenbrock().Build()
+        self.assertTrue(opti_benchmarks.Rosenbrock == description.benchFn);
+        description = builder.Salomon().Build()
+        self.assertTrue(opti_benchmarks.Salomon == description.benchFn);
+        description = builder.Schwefel().Build()
+        self.assertTrue(opti_benchmarks.Schwefel == description.benchFn);
+        description = builder.Rastrigin().Build()
+        self.assertTrue(opti_benchmarks.Rastrigin == description.benchFn);
+        description = builder.Shubert().Build()
+        self.assertTrue(opti_benchmarks.Shubert == description.benchFn);
 
     def testBenchmarkPlotter(self):
         runner = opti_benchmarks.BenchmarkRunner();
