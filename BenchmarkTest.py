@@ -52,7 +52,7 @@ class TestBenchmarkFunctions(unittest.TestCase):
         description = builder.DeJongF1().Build()
         self.assertIsNotNone(description.benchFn)
         self.assertIsNotNone(description.benchTitle)
-        self.assertEqual(description.benchTitle, opti_benchmarks.DEJONGF1_TITLE)
+        self.assertEqual(description.benchTitle, opti_benchmarks.DeJongF1.__name__)
         self.assertEqual(description.benchFn, opti_benchmarks.DeJongF1)
         return
 
@@ -95,16 +95,6 @@ class TestBenchmarkFunctions(unittest.TestCase):
         self.assertTrue(type(result.Z) == np.ndarray)
         return
 
-    def testBenchmarkPlotter(self):
-        runner = opti_benchmarks.BenchmarkRunner();
-        builder = opti_benchmarks.BenchmarkDescriptionBuilder();
-        description = builder.AmountOfPoints(150).XPlane(-5.12,5.12).YPlane(-5.12,5.12).DeJongF1().Build();
-        result = runner.RunBenchmark(description);
-        plotter = opti_benchmarks.BenchmarkResultPlotter()
-        plotter.PlotResult(result)
-        with open(result.BenchTitle + ".pdf", "r") as testFile:
-            self.assertTrue(result.BenchTitle, testFile.name)
-
     def testBenchmarkFnProperties(self):
         builder = opti_benchmarks.BenchmarkDescriptionBuilder();
         description = builder.DeJongF1().Build()
@@ -118,6 +108,15 @@ class TestBenchmarkFunctions(unittest.TestCase):
         description = builder.Branin().Build()
         self.assertTrue(opti_benchmarks.Branin == description.benchFn);
 
+    def testBenchmarkPlotter(self):
+        runner = opti_benchmarks.BenchmarkRunner();
+        builder = opti_benchmarks.BenchmarkDescriptionBuilder();
+        description = builder.AmountOfPoints(150).XPlane(-5.12,5.12).YPlane(-5.12,5.12).DeJongF1().Build();
+        result = runner.RunBenchmark(description);
+        plotter = opti_benchmarks.BenchmarkResultPlotter()
+        plotter.PlotResult(result)
+        with open(result.BenchTitle + ".pdf", "r") as testFile:
+            self.assertTrue(result.BenchTitle, testFile.name)
 
 if __name__ == "__main__":
     unittest.main()

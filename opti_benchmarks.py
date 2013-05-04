@@ -220,54 +220,71 @@ class BenchmarkDescriptionBuilder:
 
     def Ackley(self):
         self._setBenchProperties(Ackley)
+        return self
 
     def Branin(self):
         self._setBenchProperties(Branin)
+        return self
 
     def Camel(self):
         self._setBenchProperties(Camel)
+        return self
 
     def Dropwave(self):
         self._setBenchProperties(Dropwave)
+        return self
 
     def Easom(self):
         self._setBenchProperties(Easom)
+        return self
 
     def GeneralRosenbrock(self):
         self._setBenchProperties(GeneralRosenbrock)
+        return self
 
     def Goldstein(self):
         self._setBenchProperties(Goldstein)
+        return self
 
     def Griewank(self):
         self._setBenchProperties(Griewank)
+        return self
 
     def Himmelblau(self):
         self._setBenchProperties(Himmelblau)
+        return self
 
     def Michalewicz(self):
         self._setBenchProperties(Michalewicz)
+        return self
 
     def Rosenbrock(self):
         self._setBenchProperties(Rosenbrock)
+        return self
 
     def Salomon(self):
         self._setBenchProperties(Salomon)
+        return self
 
     def Schwefel(self):
         self._setBenchProperties(Schwefel)
+        return self
 
     def Rastrigin(self):
         self._setBenchProperties(Rastrigin)
+        return self
 
     def Shubert(self):
         self._setBenchProperties(Shubert)
+        return self
 
     def DeJongF1(self):
         self._setBenchProperties(DeJongF1)
+        return self
 
-    def DeJongF1(self):
-        self._setBenchProperties(DeJongF1)
+    def DeJongF5(self):
+        self._setBenchProperties(DeJongF5)
+        return self
 
     def Build(self):
         builtDescription = self.benchmarkDescription
@@ -279,8 +296,8 @@ class BenchmarkResult:
         self.X = X
         self.Y = Y
         self.Z = Z
-        if isinstance(BenchTitle, types.FunctionType):
-            self.BenchTitle = BenchTitle.__name__
+        if isinstance(benchTitle, types.FunctionType):
+            self.BenchTitle = benchTitle.__name__
         else:
             self.BenchTitle = benchTitle
         return
