@@ -136,7 +136,7 @@ class BenchmarkRunner:
         for i in range(description.amount_of_points):
             val = description.benchFn(x[i],y[i])
             z.append(val)
-        return BenchmarkResult(description.CreateXLinspace(), description.CreateYLinspace(), np.array(z), description.benchTitle)
+        return BenchmarkResult(x,y, np.array(z), description.benchTitle)
 
 class BenchmarkResultPlotter:
     def __init__(self):
