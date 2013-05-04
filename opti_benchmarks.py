@@ -1,3 +1,4 @@
+import types
 import numpy as np
 from mpl_toolkits.mplot3d import Axes3D
 from matplotlib import cm
@@ -54,6 +55,136 @@ DEJONGF1_TITLE = "DeJong F1"
 def DeJongF1(x,y):
 	return x**2 + y**2
 
+#http://www.geatbx.com/docu/fcnindex-01.html
+def Ackley(x,y):
+	a = 20
+	b = 0.2
+	c = 2* np.pi
+	ndiv = 1.0 / 2.0
+	AckleySum = -a * np.exp(-b * np.sqrt(ndiv*(x** 2 + y ** 2)))
+
+	AckleySum -= np.exp(ndiv * (np.cos(c*x) + np.cos(c*y))) + a + np.exp(1)
+	return AckleySum
+
+def Branin(x,y):
+	a = 1
+	b = 5.1 / (4 * np.pi) ** 2
+	c = 5 / np.pi
+	d = 6
+	e = 10
+	f = 1 / 8 * np.pi
+	answ = a * (y - b * (x**2) + c*x - d)**2 + e * (1 - f)*np.cos(x) + e
+	return answ
+
+def Camel(x,y):
+	CamelSum = (4 - 2.1 * (x ** 2) + (x ** 4.0)/3.0) * x ** 2 + (x * y) + (-4 + 4 * y **2)* y ** 2
+	return CamelSum
+
+def Dropwave(x,y):
+	powsum = x ** 2 + y ** 2
+	answ = 1 + np.cos(12 * np.sqrt(powsum))
+	answ /= 0.5 * powsum + 2
+	return answ
+
+def Easom(x,y):
+	answ = -np.cos(x)*np.cos(y)*np.exp(-1 * ((x - np.pi) ** 2) - ((y - np.pi) ** 2))
+	return answ
+
+def GeneralRosenbrock(x,y):
+	answ1 = x ** 2 - 10 * np.cos(2*np.pi*x)
+	answ1 += y ** 2 - 10 * np.cos(2*np.pi*y)
+	return 100 + answ1
+
+def Goldstein(x,y):
+	answ = (1 + (( x + y + 1) ** 2) * (19 - 14 * x + ((3*x)**2) - 14 * y + 6 * x * y + ((3 * y) ** 2)))
+	answ *= (30 + ((2 * x - 3 * y)**2) * (18 -32 * x +  (12 * x)**2 + 48 * y - 36 * x * y + (27 * y)**2))
+	return answ  / 1000000.0
+
+#http://www.geatbx.com/docu/fcnindex-01.html
+def Griewank(x,y):
+	griewankSum1 = (x**2)/4000.0 + (y**2)/4000.0
+
+	griewankSum2 = np.cos(x / np.sqrt(1)) * np.cos(y / np.sqrt(2))
+	return griewankSum1 - griewankSum2 + 1
+
+def Himmelblau(x,y):
+	answ1 = (x ** 2 + y - 11)**2 + (x + y ** 2 - 7) ** 2
+	return answ1
+
+def Michalewicz(x,y):
+	m = 20
+	sumAnswx = np.sin(x) * (np.sin((1 - x ** 2) / np.pi))**(2 * m)
+	sumAnswy = np.sin(y) * (np.sin((1 - y ** 2) / np.pi))**(2 * m)
+	return -1 * (sumAnswx + sumAnswy) 
+
+def Rosenbrock(x,y):
+	answ1 = 100 * ((x - y**2) ** 2) + (1-x)**2
+	return answ1
+
+def Salomon(x,y):
+	SalomonSum1 = 0
+	SalomonSum1 += x ** 2
+	SalomonSum1 += y ** 2
+	SalomonSum1 = -np.cos(2*np.pi*np.sqrt(SalomonSum1))
+	SalomonSum2 = 0
+	SalomonSum2 += (x ** 2)# + 1
+	SalomonSum2 += (y ** 2)# + 1
+	SalomonSum2 = 0.1 * np.sqrt(SalomonSum2)+1
+	return SalomonSum1 + SalomonSum2
+
+SCHWEFEL_CONSTANT = 418.9829 * 2
+def Schwefel(x,y):
+	schwefelSum = 0
+	schwefelSum += (-1 * x)*np.sin(np.sqrt(abs(x)))
+	schwefelSum += (-1 * y)*np.sin(np.sqrt(abs(y)))
+	return SCHWEFEL_CONSTANT + schwefelSum
+
+def Rastrigin(x,y):
+	rastriginSum = 0
+	rastriginSum += x**2 + 10*np.cos(2*np.pi*x) + 10
+	rastriginSum += y**2 + 10*np.cos(2*np.pi*y) + 10
+	return rastriginSum
+
+def Shubert(x,y):
+	answ1 = 0.0
+	for i in range(4):
+		answ1 += i * np.cos((i+1) * x + i)
+	answ2 = 0.0
+	for j in range(4):
+		answ2 += i*np.cos((i+1) * y + i)
+	return answ1 * answ2
+
+def insertValuesIntoMatrix(matrix,value,row,index,timesToInsert):
+	if matrix.size / 2 >= index + timesToInsert:
+		for i in range(timesToInsert):
+			matrix[row,index+i] = value
+	
+
+def createDeJongF5Matrix():
+	a = np.array([])
+	a.resize(2,25)
+	for i in range(2):
+		value = -32
+		for j in range(25):
+			a[0,j] = value
+			value = value + 16
+			if j > 0 and (j+1) % 5 == 0:
+				value = -32
+				valueIndex = ((j + 1) / 5) - 1
+				startIndex = valueIndex * 5
+				insertValuesIntoMatrix(a,a[0,valueIndex],1,startIndex,5) 
+	return a
+
+DEJONGF5_MATRIX = createDeJongF5Matrix()
+def DeJongF5(x,y):
+	sumj = 0;
+	for j in range(25):
+		sumi = 0
+		sumi = (x - DEJONGF5_MATRIX[0,j])**6 + (y - DEJONGF5_MATRIX[1,j])**6
+		sumj = sumj + (j + sumi)**-1
+	return (0.002 + sumj)**-1
+
+
 
 class BenchmarkDescriptionBuilder:
     def __init__(self):
@@ -83,10 +214,60 @@ class BenchmarkDescriptionBuilder:
         self.benchmarkDescription.amount_of_points = amount
         return self
 
+    def _setBenchProperties(self, benchFn):
+        self.benchmarkDescription.benchTitle = benchFn.__name__
+        self.benchmarkDescription.benchFn = benchFn
+
+    def Ackley(self):
+        self._setBenchProperties(Ackley)
+
+    def Branin(self):
+        self._setBenchProperties(Branin)
+
+    def Camel(self):
+        self._setBenchProperties(Camel)
+
+    def Dropwave(self):
+        self._setBenchProperties(Dropwave)
+
+    def Easom(self):
+        self._setBenchProperties(Easom)
+
+    def GeneralRosenbrock(self):
+        self._setBenchProperties(GeneralRosenbrock)
+
+    def Goldstein(self):
+        self._setBenchProperties(Goldstein)
+
+    def Griewank(self):
+        self._setBenchProperties(Griewank)
+
+    def Himmelblau(self):
+        self._setBenchProperties(Himmelblau)
+
+    def Michalewicz(self):
+        self._setBenchProperties(Michalewicz)
+
+    def Rosenbrock(self):
+        self._setBenchProperties(Rosenbrock)
+
+    def Salomon(self):
+        self._setBenchProperties(Salomon)
+
+    def Schwefel(self):
+        self._setBenchProperties(Schwefel)
+
+    def Rastrigin(self):
+        self._setBenchProperties(Rastrigin)
+
+    def Shubert(self):
+        self._setBenchProperties(Shubert)
+
     def DeJongF1(self):
-        self.benchmarkDescription.benchTitle = DEJONGF1_TITLE
-        self.benchmarkDescription.benchFn = DeJongF1
-        return self
+        self._setBenchProperties(DeJongF1)
+
+    def DeJongF1(self):
+        self._setBenchProperties(DeJongF1)
 
     def Build(self):
         builtDescription = self.benchmarkDescription
@@ -98,7 +279,10 @@ class BenchmarkResult:
         self.X = X
         self.Y = Y
         self.Z = Z
-        self.BenchTitle = benchTitle
+        if isinstance(BenchTitle, types.FunctionType):
+            self.BenchTitle = BenchTitle.__name__
+        else:
+            self.BenchTitle = benchTitle
         return
 
 class BenchmarkDescriptionError(Exception):
@@ -136,7 +320,7 @@ class BenchmarkRunner:
         for i in range(description.amount_of_points):
             val = description.benchFn(x[i],y[i])
             z.append(val)
-        return BenchmarkResult(x,y, np.array(z), description.benchTitle)
+        return BenchmarkResult(x, y, np.array(z), description.benchTitle)
 
 class BenchmarkResultPlotter:
     def __init__(self):

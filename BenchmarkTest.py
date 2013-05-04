@@ -90,6 +90,9 @@ class TestBenchmarkFunctions(unittest.TestCase):
         self.assertTrue(len(result.X) == description.amount_of_points)
         self.assertTrue(len(result.Y) == description.amount_of_points)
         self.assertTrue(len(result.Z) == description.amount_of_points)
+        self.assertTrue(type(result.X) == np.ndarray)
+        self.assertTrue(type(result.Y) == np.ndarray)
+        self.assertTrue(type(result.Z) == np.ndarray)
         return
 
     def testBenchmarkPlotter(self):
@@ -101,6 +104,19 @@ class TestBenchmarkFunctions(unittest.TestCase):
         plotter.PlotResult(result)
         with open(result.BenchTitle + ".pdf", "r") as testFile:
             self.assertTrue(result.BenchTitle, testFile.name)
+
+    def testBenchmarkFnProperties(self):
+        builder = opti_benchmarks.BenchmarkDescriptionBuilder();
+        description = builder.DeJongF1().Build()
+        self.assertTrue(opti_benchmarks.DeJongF1 == description.benchFn);
+        description = builder.DeJongF5().Build()
+        self.assertTrue(opti_benchmarks.DeJongF5 == description.benchFn);
+        description = builder.DeJongF5().Build()
+        self.assertTrue(opti_benchmarks.DeJongF5 == description.benchFn);
+        description = builder.Ackley().Build()
+        self.assertTrue(opti_benchmarks.Ackley == description.benchFn);
+        description = builder.Branin().Build()
+        self.assertTrue(opti_benchmarks.Branin == description.benchFn);
 
 
 if __name__ == "__main__":
