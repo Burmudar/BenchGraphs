@@ -28,45 +28,43 @@ class BenchmarkDescription:
         " Benchmark Title [" + str(self.benchTitle) + "] - " +
         " Benchmark Function [" + str(self.benchFn) + "]>")
 
-    def HasXPlane(self):
+    def has_x_plane(self):
         return self.x_near != self.x_far
 
-    def HasYPlane(self):
+    def has_y_plane(self):
         return self.y_near != self.y_far
 
-    def HasZPlane(self):
+    def has_z_plane(self):
         return self.z_near != self.z_far
 
-    def HasAmountOfPoints(self):
+    def has_amount_of_points(self):
         return self.amount_of_points > 0
 
-    def CreateXLinspace(self):
-        if not self.HasXPlane():
+    def create_x_linspace(self):
+        if not self.has_x_plane():
             raise BenchmarkDescriptionError("Cannot create X Linspace with no defined X Plane")
         return np.linspace(self.x_near, self.x_far, self.amount_of_points)
 
-    def CreateYLinspace(self):
-        if not self.HasYPlane():
+    def create_y_linspace(self):
+        if not self.has_y_plane():
             raise BenchmarkDescriptionError("Cannot create Y Linspace with no defined Y Plane")
         return np.linspace(self.y_near, self.y_far, self.amount_of_points)
 
-DEJONGF1_TITLE = "DeJong F1"
-
-def DeJongF1(x,y):
+def dejong_F1(x,y):
 	return x**2 + y**2
 
 #http://www.geatbx.com/docu/fcnindex-01.html
-def Ackley(x,y):
+def ackley(x,y):
 	a = 20
 	b = 0.2
 	c = 2* np.pi
 	ndiv = 1.0 / 2.0
-	AckleySum = -a * np.exp(-b * np.sqrt(ndiv*(x** 2 + y ** 2)))
+	ackleySum = -a * np.exp(-b * np.sqrt(ndiv*(x** 2 + y ** 2)))
 
-	AckleySum -= np.exp(ndiv * (np.cos(c*x) + np.cos(c*y))) + a + np.exp(1)
-	return AckleySum
+	ackleySum -= np.exp(ndiv * (np.cos(c*x) + np.cos(c*y))) + a + np.exp(1)
+	return ackleySum
 
-def Branin(x,y):
+def branin(x,y):
 	a = 1
 	b = 5.1 / (4 * np.pi) ** 2
 	c = 5 / np.pi
@@ -76,76 +74,76 @@ def Branin(x,y):
 	answ = a * (y - b * (x**2) + c*x - d)**2 + e * (1 - f)*np.cos(x) + e
 	return answ
 
-def Camel(x,y):
-	CamelSum = (4 - 2.1 * (x ** 2) + (x ** 4.0)/3.0) * x ** 2 + (x * y) + (-4 + 4 * y **2)* y ** 2
-	return CamelSum
+def camel(x,y):
+	camelSum = (4 - 2.1 * (x ** 2) + (x ** 4.0)/3.0) * x ** 2 + (x * y) + (-4 + 4 * y **2)* y ** 2
+	return camelSum
 
-def Dropwave(x,y):
+def dropwave(x,y):
 	powsum = x ** 2 + y ** 2
 	answ = 1 + np.cos(12 * np.sqrt(powsum))
 	answ /= 0.5 * powsum + 2
 	return answ
 
-def Easom(x,y):
+def easom(x,y):
 	answ = -np.cos(x)*np.cos(y)*np.exp(-1 * ((x - np.pi) ** 2) - ((y - np.pi) ** 2))
 	return answ
 
-def GeneralRosenbrock(x,y):
+def general_rosenbrock(x,y):
 	answ1 = x ** 2 - 10 * np.cos(2*np.pi*x)
 	answ1 += y ** 2 - 10 * np.cos(2*np.pi*y)
 	return 100 + answ1
 
-def Goldstein(x,y):
+def goldstein(x,y):
 	answ = (1 + (( x + y + 1) ** 2) * (19 - 14 * x + ((3*x)**2) - 14 * y + 6 * x * y + ((3 * y) ** 2)))
 	answ *= (30 + ((2 * x - 3 * y)**2) * (18 -32 * x +  (12 * x)**2 + 48 * y - 36 * x * y + (27 * y)**2))
 	return answ  / 1000000.0
 
 #http://www.geatbx.com/docu/fcnindex-01.html
-def Griewank(x,y):
+def griewank(x,y):
 	griewankSum1 = (x**2)/4000.0 + (y**2)/4000.0
 
 	griewankSum2 = np.cos(x / np.sqrt(1)) * np.cos(y / np.sqrt(2))
 	return griewankSum1 - griewankSum2 + 1
 
-def Himmelblau(x,y):
+def himmelblau(x,y):
 	answ1 = (x ** 2 + y - 11)**2 + (x + y ** 2 - 7) ** 2
 	return answ1
 
-def Michalewicz(x,y):
+def michalewicz(x,y):
 	m = 20
 	sumAnswx = np.sin(x) * (np.sin((1 - x ** 2) / np.pi))**(2 * m)
 	sumAnswy = np.sin(y) * (np.sin((1 - y ** 2) / np.pi))**(2 * m)
 	return -1 * (sumAnswx + sumAnswy) 
 
-def Rosenbrock(x,y):
+def rosenbrock(x,y):
 	answ1 = 100 * ((x - y**2) ** 2) + (1-x)**2
 	return answ1
 
-def Salomon(x,y):
-	SalomonSum1 = 0
-	SalomonSum1 += x ** 2
-	SalomonSum1 += y ** 2
-	SalomonSum1 = -np.cos(2*np.pi*np.sqrt(SalomonSum1))
-	SalomonSum2 = 0
-	SalomonSum2 += (x ** 2)# + 1
-	SalomonSum2 += (y ** 2)# + 1
-	SalomonSum2 = 0.1 * np.sqrt(SalomonSum2)+1
-	return SalomonSum1 + SalomonSum2
+def salomon(x,y):
+	salomonSum1 = 0
+	salomonSum1 += x ** 2
+	salomonSum1 += y ** 2
+	salomonSum1 = -np.cos(2*np.pi*np.sqrt(salomonSum1))
+	salomonSum2 = 0
+	salomonSum2 += (x ** 2)# + 1
+	salomonSum2 += (y ** 2)# + 1
+	salomonSum2 = 0.1 * np.sqrt(salomonSum2)+1
+	return salomonSum1 + salomonSum2
 
 SCHWEFEL_CONSTANT = 418.9829 * 2
-def Schwefel(x,y):
+def schwefel(x,y):
 	schwefelSum = 0
 	schwefelSum += (-1 * x)*np.sin(np.sqrt(abs(x)))
 	schwefelSum += (-1 * y)*np.sin(np.sqrt(abs(y)))
 	return SCHWEFEL_CONSTANT + schwefelSum
 
-def Rastrigin(x,y):
+def rastrigin(x,y):
 	rastriginSum = 0
 	rastriginSum += x**2 + 10*np.cos(2*np.pi*x) + 10
 	rastriginSum += y**2 + 10*np.cos(2*np.pi*y) + 10
 	return rastriginSum
 
-def Shubert(x,y):
+def shubert(x,y):
 	answ1 = 0.0
 	for i in range(4):
 		answ1 += i * np.cos((i+1) * x + i)
@@ -154,13 +152,13 @@ def Shubert(x,y):
 		answ2 += i*np.cos((i+1) * y + i)
 	return answ1 * answ2
 
-def insertValuesIntoMatrix(matrix,value,row,index,timesToInsert):
+def insert_values_into_matrix(matrix,value,row,index,timesToInsert):
 	if matrix.size / 2 >= index + timesToInsert:
 		for i in range(timesToInsert):
 			matrix[row,index+i] = value
 	
 
-def createDeJongF5Matrix():
+def create_dejong_F5_matrix():
 	a = np.array([])
 	a.resize(2,25)
 	for i in range(2):
@@ -172,11 +170,12 @@ def createDeJongF5Matrix():
 				value = -32
 				valueIndex = ((j + 1) / 5) - 1
 				startIndex = valueIndex * 5
-				insertValuesIntoMatrix(a,a[0,valueIndex],1,startIndex,5) 
+				insert_values_into_matrix(a,a[0,valueIndex],1,startIndex,5) 
 	return a
 
-DEJONGF5_MATRIX = createDeJongF5Matrix()
-def DeJongF5(x,y):
+
+DEJONGF5_MATRIX = create_dejong_F5_matrix()
+def dejong_F5(x,y):
 	sumj = 0;
 	for j in range(25):
 		sumi = 0
@@ -188,107 +187,107 @@ def DeJongF5(x,y):
 
 class BenchmarkDescriptionBuilder:
     def __init__(self):
-        self.NewInstance()
+        self.new_instance()
         return
 
-    def NewInstance(self):
+    def new_instance(self):
         self.benchmarkDescription = BenchmarkDescription()
         return self
 
-    def XPlane(self,xNear,xFar):
+    def x_plane(self,xNear,xFar):
         self.benchmarkDescription.x_near = xNear
         self.benchmarkDescription.x_far = xFar
         return self
 
-    def YPlane(self,yNear, yFar):
+    def y_plane(self,yNear, yFar):
         self.benchmarkDescription.y_near = yNear
         self.benchmarkDescription.y_far = yFar
         return self
 
-    def ZPlane(self,zNear, zFar):
+    def z_plane(self,zNear, zFar):
         self.benchmarkDescription.z_near = zNear
         self.benchmarkDescription.z_far = zFar
         return self
 
-    def AmountOfPoints(self, amount):
+    def amount_of_points(self, amount):
         self.benchmarkDescription.amount_of_points = amount
         return self
 
-    def _setBenchProperties(self, benchFn):
+    def _set_bench_properties(self, benchFn):
         self.benchmarkDescription.benchTitle = benchFn.__name__
         self.benchmarkDescription.benchFn = benchFn
 
-    def Ackley(self):
-        self._setBenchProperties(Ackley)
+    def ackley(self):
+        self._set_bench_properties(ackley)
         return self
 
-    def Branin(self):
-        self._setBenchProperties(Branin)
+    def branin(self):
+        self._set_bench_properties(branin)
         return self
 
-    def Camel(self):
-        self._setBenchProperties(Camel)
+    def camel(self):
+        self._set_bench_properties(camel)
         return self
 
-    def Dropwave(self):
-        self._setBenchProperties(Dropwave)
+    def dropwave(self):
+        self._set_bench_properties(dropwave)
         return self
 
-    def Easom(self):
-        self._setBenchProperties(Easom)
+    def easom(self):
+        self._set_bench_properties(easom)
         return self
 
-    def GeneralRosenbrock(self):
-        self._setBenchProperties(GeneralRosenbrock)
+    def general_rosenbrock(self):
+        self._set_bench_properties(general_rosenbrock)
         return self
 
-    def Goldstein(self):
-        self._setBenchProperties(Goldstein)
+    def goldstein(self):
+        self._set_bench_properties(goldstein)
         return self
 
-    def Griewank(self):
-        self._setBenchProperties(Griewank)
+    def griewank(self):
+        self._set_bench_properties(griewank)
         return self
 
-    def Himmelblau(self):
-        self._setBenchProperties(Himmelblau)
+    def himmelblau(self):
+        self._set_bench_properties(himmelblau)
         return self
 
-    def Michalewicz(self):
-        self._setBenchProperties(Michalewicz)
+    def michalewicz(self):
+        self._set_bench_properties(michalewicz)
         return self
 
-    def Rosenbrock(self):
-        self._setBenchProperties(Rosenbrock)
+    def rosenbrock(self):
+        self._set_bench_properties(rosenbrock)
         return self
 
-    def Salomon(self):
-        self._setBenchProperties(Salomon)
+    def salomon(self):
+        self._set_bench_properties(salomon)
         return self
 
-    def Schwefel(self):
-        self._setBenchProperties(Schwefel)
+    def schwefel(self):
+        self._set_bench_properties(schwefel)
         return self
 
-    def Rastrigin(self):
-        self._setBenchProperties(Rastrigin)
+    def rastrigin(self):
+        self._set_bench_properties(rastrigin)
         return self
 
-    def Shubert(self):
-        self._setBenchProperties(Shubert)
+    def shubert(self):
+        self._set_bench_properties(shubert)
         return self
 
-    def DeJongF1(self):
-        self._setBenchProperties(DeJongF1)
+    def dejong_F1(self):
+        self._set_bench_properties(dejong_F1)
         return self
 
-    def DeJongF5(self):
-        self._setBenchProperties(DeJongF5)
+    def dejong_F5(self):
+        self._set_bench_properties(dejong_F5)
         return self
 
-    def Build(self):
+    def build(self):
         builtDescription = self.benchmarkDescription
-        self.NewInstance()
+        self.new_instance()
         return builtDescription
 
 class BenchmarkResult:
@@ -314,25 +313,25 @@ class BenchmarkRunner:
     def __init__(self):
         return
 
-    def IsValidDescription(self,description):
+    def is_valid_description(self,description):
         if description is None:
             return False
-        if not description.HasXPlane():
+        if not description.has_x_plane():
             return False
-        if not description.HasYPlane():
+        if not description.has_y_plane():
             return False
-        if not description.HasAmountOfPoints():
+        if not description.has_amount_of_points():
             return False
         if description.benchFn is None:
             return False
         return True
 
-    def RunBenchmark(self,description):
-        if not self.IsValidDescription(description):
+    def run_benchmark(self,description):
+        if not self.is_valid_description(description):
             raise BenchmarkDescriptionError(description, "The benchamrk description given was not valid")
         z = []
-        x = description.CreateXLinspace()
-        y = description.CreateYLinspace()
+        x = description.create_x_linspace()
+        y = description.create_y_linspace()
         x, y = np.meshgrid(x, y)
         for i in range(description.amount_of_points):
             val = description.benchFn(x[i],y[i])
@@ -349,7 +348,7 @@ class BenchmarkResultPlotter:
         self.major_formatter = FormatStrFormatter('%.0f')
         return
 
-    def PlotResult(self,benchmarkResult, figureName=''):
+    def plot_result(self,benchmarkResult, figureName=''):
        fig = plt.figure()
        ax = Axes3D(fig)
        surf = ax.plot_surface(benchmarkResult.X, benchmarkResult.Y, benchmarkResult.Z, rstride = self.rstride, cstride =
