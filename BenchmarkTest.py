@@ -4,12 +4,12 @@ import opti_benchmarks
 
 class TestBenchmarkFunctions(unittest.TestCase):
 
-    def testBenchmarkDescriptionBuilderbuild(self):
+    def testBenchmarkDescriptionBuilderBuild(self):
         Builder = opti_benchmarks.BenchmarkDescriptionBuilder()
         description = Builder.build()
         self.assertIsNotNone(description)
 
-    def testBenchmarkDescriptionx_plane(self):
+    def testBenchmarkDescription_X_Plane(self):
         Builder = opti_benchmarks.BenchmarkDescriptionBuilder()
         description = Builder.x_plane(-5,5).build()
         self.assertEqual(description.x_near, -5)
@@ -17,7 +17,7 @@ class TestBenchmarkFunctions(unittest.TestCase):
         self.assertTrue(description.has_x_plane())
         return
 
-    def testBenchmarkDescriptiony_plane(self):
+    def testBenchmarkDescription_Y_Plane(self):
         Builder = opti_benchmarks.BenchmarkDescriptionBuilder()
         description = Builder.y_plane(-5,5).build()
         self.assertEqual(description.y_near, -5)
@@ -25,7 +25,7 @@ class TestBenchmarkFunctions(unittest.TestCase):
         self.assertTrue(description.has_y_plane())
         return
 
-    def testBenchmarkDescriptionz_plane(self):
+    def testBenchmarkDescription_Z_plane(self):
         Builder = opti_benchmarks.BenchmarkDescriptionBuilder()
         description = Builder.z_plane(-5,5).build()
         self.assertEqual(description.z_near, -5)
@@ -33,13 +33,13 @@ class TestBenchmarkFunctions(unittest.TestCase):
         self.assertTrue(description.has_z_plane())
         return
 
-    def testBenchmarkDescriptionamount_of_points(self):
+    def testBenchmarkDescription_Amount_Of_Points(self):
         Builder = opti_benchmarks.BenchmarkDescriptionBuilder()
         description = Builder.amount_of_points(150).build()
         self.assertEqual(description.amount_of_points, 150)
         return
 
-    def testBenchmarkDescriptionBuildernew_instance(self):
+    def testBenchmarkDescriptionBuilder_New_Instance(self):
         Builder = opti_benchmarks.BenchmarkDescriptionBuilder()
         description = Builder.amount_of_points(150).new_instance().x_plane(-10,10).build()
         self.assertNotEqual(description.amount_of_points, 150)
@@ -47,7 +47,7 @@ class TestBenchmarkFunctions(unittest.TestCase):
         self.assertEquals(description.x_far, 10)
         return
 
-    def testBenchmarkDescriptionWithdejong_F1(self):
+    def testBenchmarkDescriptionWith_DeJong_F1(self):
         Builder = opti_benchmarks.BenchmarkDescriptionBuilder()
         description = Builder.dejong_F1().build()
         self.assertIsNotNone(description.benchFn)
@@ -64,7 +64,7 @@ class TestBenchmarkFunctions(unittest.TestCase):
         self.assertIsInstance(description.create_x_linspace(), np.ndarray, "Expected created X linspace to be of numpy.darray")
         self.assertIsInstance(description.create_y_linspace(), np.ndarray, "Expected created Y linsapce to be of numpy.darray")
 
-    def testBenchRunneris_valid_description(self):
+    def testBenchRunner_Is_Valid_Description(self):
         runner = opti_benchmarks.BenchmarkRunner()
         self.assertFalse(runner.is_valid_description(None))
         self.assertFalse(runner.is_valid_description(opti_benchmarks.BenchmarkDescription()))
@@ -80,7 +80,7 @@ class TestBenchmarkFunctions(unittest.TestCase):
         return
 
 
-    def testBenchRunnerrun_benchmark(self):
+    def testBenchRunner_Run_Benchmark(self):
         runner = opti_benchmarks.BenchmarkRunner()
         self.assertRaises(opti_benchmarks.BenchmarkDescriptionError, runner.run_benchmark, None)
         Builder = opti_benchmarks.BenchmarkDescriptionBuilder()
@@ -133,6 +133,44 @@ class TestBenchmarkFunctions(unittest.TestCase):
         self.assertTrue(opti_benchmarks.rastrigin == description.benchFn);
         description = Builder.shubert().build()
         self.assertTrue(opti_benchmarks.shubert == description.benchFn);
+
+    def testBenchmarkFactory(self):
+        factory = opti_benchmarks.BenchmarkDescriptionFactory();
+        description = factory.create_deJong_F1_description();
+        self.assertTrue(opti_benchmarks.dejong_F1 == description.benchFn);
+        description = factory.create_deJong_F5_description()
+        self.assertTrue(opti_benchmarks.dejong_F5 == description.benchFn);
+        description = factory.create_ackley_description()
+        self.assertTrue(opti_benchmarks.ackley == description.benchFn);
+        description = factory.create_branin_description()
+        self.assertTrue(opti_benchmarks.branin == description.benchFn);
+        description = factory.create_camel_description()
+        self.assertTrue(opti_benchmarks.camel == description.benchFn);
+        description = factory.create_dropwave_description()
+        self.assertTrue(opti_benchmarks.dropwave == description.benchFn);
+        description = factory.create_easom_description()
+        self.assertTrue(opti_benchmarks.easom == description.benchFn);
+        description = factory.create_general_rosenbrock_description()
+        self.assertTrue(opti_benchmarks.general_rosenbrock == description.benchFn);
+        description = factory.create_general_rosenbrock_description()
+        self.assertTrue(opti_benchmarks.goldstein == description.benchFn);
+        description = factory.create_griewank_description()
+        self.assertTrue(opti_benchmarks.griewank == description.benchFn);
+        description = factory.create_himmelblau_description()
+        self.assertTrue(opti_benchmarks.himmelblau == description.benchFn);
+        description = factory.create_michalewicz_description()
+        self.assertTrue(opti_benchmarks.michalewicz == description.benchFn);
+        description = factory.create_rosenbrock_description();
+        self.assertTrue(opti_benchmarks.rosenbrock == description.benchFn);
+        description = factory.create_salamon_description()
+        self.assertTrue(opti_benchmarks.salomon == description.benchFn);
+        description = factory.create_schwefel_description()
+        self.assertTrue(opti_benchmarks.schwefel == description.benchFn);
+        description = factory.create_rastrigin_description()
+        self.assertTrue(opti_benchmarks.rastrigin == description.benchFn);
+        description = factory.create_shubert_description()
+        self.assertTrue(opti_benchmarks.shubert == description.benchFn);
+
 
     def testBenchmarkPlotter(self):
         runner = opti_benchmarks.BenchmarkRunner();

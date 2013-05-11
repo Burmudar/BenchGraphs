@@ -113,7 +113,7 @@ def michalewicz(x,y):
 	m = 20
 	sumAnswx = np.sin(x) * (np.sin((1 - x ** 2) / np.pi))**(2 * m)
 	sumAnswy = np.sin(y) * (np.sin((1 - y ** 2) / np.pi))**(2 * m)
-	return -1 * (sumAnswx + sumAnswy) 
+	return -1 * (sumAnswx + sumAnswy)
 
 def rosenbrock(x,y):
 	answ1 = 100 * ((x - y**2) ** 2) + (1-x)**2
@@ -156,7 +156,7 @@ def insert_values_into_matrix(matrix,value,row,index,timesToInsert):
 	if matrix.size / 2 >= index + timesToInsert:
 		for i in range(timesToInsert):
 			matrix[row,index+i] = value
-	
+
 
 def create_dejong_F5_matrix():
 	a = np.array([])
@@ -170,7 +170,7 @@ def create_dejong_F5_matrix():
 				value = -32
 				valueIndex = ((j + 1) / 5) - 1
 				startIndex = valueIndex * 5
-				insert_values_into_matrix(a,a[0,valueIndex],1,startIndex,5) 
+				insert_values_into_matrix(a,a[0,valueIndex],1,startIndex,5)
 	return a
 
 
@@ -182,7 +182,6 @@ def dejong_F5(x,y):
 		sumi = (x - DEJONGF5_MATRIX[0,j])**6 + (y - DEJONGF5_MATRIX[1,j])**6
 		sumj = sumj + (j + sumi)**-1
 	return (0.002 + sumj)**-1
-
 
 
 class BenchmarkDescriptionBuilder:
@@ -359,3 +358,59 @@ class BenchmarkResultPlotter:
            plt.savefig(benchmarkResult.BenchTitle)
        else:
            plt.savefig(figureName)
+
+class BenchmarkDescriptionFactory:
+    def __init__(self):
+        self.builder = BenchmarkDescriptionBuilder();
+
+    def create_deJong_F1_description(self):
+        return self.builder.new_instance().dejong_F1().amount_of_points(150).x_plane(-5.12,5.12).y_plane(-5.12,5.12).build()
+
+    def create_deJong_F5_description(self):
+        return self.builder.new_instance().dejong_F5().amount_of_points(150).x_plane(-65.356,65.356).y_plane(-65.356,65.356).build()
+
+    def create_shekels_foxhole_description(self):
+        return self.create_deJong_F5_description(self)
+
+    def create_ackley_description(self):
+        return self.builder.new_instance().ackley().amount_of_points(150).x_plane(-32.768,32.768).y_plane(-32.768,32.768).build()
+
+    def create_branin_description(self):
+        return self.builder.new_instance().branin().amount_of_points(150).x_plane(-5,10).y_plane(0,15).build()
+
+    def create_camel_description(self):
+        return self.builder.new_instance().camel().amount_of_points(150).x_plane(-3,3).y_plane(-2,2).build()
+
+    def create_dropwave_description(self):
+        return self.builder.new_instance().dropwave().amount_of_points(150).x_plane(-5.12,5.12).y_plane(-5.12,5.12).build()
+
+    def create_easom_description(self):
+        return self.builder.new_instance().dejong_F1().amount_of_points(150).x_plane(-100,100).y_plane(-100,100).build()
+
+    def create_general_rosenbrock_description(self):
+        return self.builder.new_instance().general_rosenbrock().amount_of_points(150).x_plane(-10,10).y_plane(-10,10).build()
+
+    def create_goldstein_description(self):
+        return self.builder.new_instance().goldstein().amount_of_points(150).x_plane(-2,2).y_plane(-2,2).build()
+
+    def create_griewank_description(self):
+        return self.builder.new_instance().griewank().amount_of_points(150).x_plane(-600,600).y_plane(-600,600).build()
+
+    def create_himmelblau_description(self):
+        return self.builder.new_instance().himmelblau().amount_of_points(150).x_plane(-5.12,5.12).y_plane(-5.12,5.12).build()
+
+    def create_rosenbrock_description(self):
+        return self.builder.new_instance().rosenbrock().amount_of_points(150).x_plane(-2.048,2.048).y_plane(-2.048,2.048).build()
+
+    def create_salamon_description(self):
+        return self.builder.new_instance().salamon().amount_of_points(350).x_plane(-5,5).y_plane(-5,5).build()
+
+    def create_schwefel_description(self):
+        return self.builder.new_instance().schwefel().amount_of_points(150).x_plane(-500,500).y_plane(-500,500).build()
+
+    def create_rastrigin_description(self):
+        return self.builder.new_instance().rastrigin().amount_of_points(150).x_plane(-5.12,5.12).y_plane(-5.12,5.12).build()
+
+    def create_shubert_description(self):
+        return self.builder.new_instance().shubert().amount_of_points(150).x_plane(-5.12,5.12).y_plane(-5.12,5.12).build()
+
